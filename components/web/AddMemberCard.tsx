@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useAuth } from "@/contexts/AuthContext";
 import { joinGroupNotificationAction } from "@/lib/actions/notification-action";
 import { useSocket } from "@/contexts/SocketContext";
 import { toast } from "../ui/toast";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface AddMemberCardProps {
   groupId: string;
@@ -14,7 +14,7 @@ interface AddMemberCardProps {
 }
 
 export function AddMemberCard({ groupId, groupName }: AddMemberCardProps) {
-  const { accessToken } = useAuth();
+  const authAction = useAuthAction()
   const { socket } = useSocket();
   const [username, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,7 +23,7 @@ export function AddMemberCard({ groupId, groupName }: AddMemberCardProps) {
     if (!username?.trim()) return;
     setLoading(true);
     try {
-      const res = await joinGroupNotificationAction(accessToken, username, groupId, groupName);
+      const res = await authAction(joinGroupNotificationAction, username, groupId, groupName);
       if (!res.success) {
         toast.add({ type: "error", description: res.error ?? "Could not send invitation" });
         return;

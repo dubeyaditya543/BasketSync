@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { joinGroupAction } from "@/lib/actions/group-action";
 import { toast } from "../ui/toast";
 import { deleteJoinGroupNotification } from "@/lib/actions/notification-action";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface NotificationItemProps {
   notificationId: string;
@@ -13,16 +14,16 @@ interface NotificationItemProps {
 }
 
 export function NotificationItem({ notificationId, message, link, groupId }: NotificationItemProps) {
-  const { accessToken } = useAuth();
+  const authAction = useAuthAction()
 
   async function handleAddMember() {
     try {
-      const res = await joinGroupAction(accessToken, groupId);
+      const res = await authAction(joinGroupAction, groupId);
       if (!res.success) {
         toast.add({ type: "error", description: res.error ?? "Could not join you" });
         return;
       }
-      await deleteJoinGroupNotification(accessToken, notificationId)
+      await authAction(deleteJoinGroupNotification, notificationId)
       toast.add({type: "success", description: "Joined"})
     } catch {
       toast.add({ type: "error", description: "Something went wrong" });

@@ -16,6 +16,7 @@ import { Progress } from "../ui/progress";
 import { toast } from "../ui/toast";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 export interface GroupCardProps {
   group: {
@@ -38,7 +39,8 @@ export interface GroupCardProps {
 }
 
 export function GroupCard({ group, purchasedItems, totalItems }: GroupCardProps) {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction()
   const [isGroupEditable, setIsGroupEditable] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>(group.groupName);
   const router = useRouter();
@@ -66,7 +68,7 @@ export function GroupCard({ group, purchasedItems, totalItems }: GroupCardProps)
       const formData = new FormData();
       formData.append("groupName", groupName);
 
-      const response = await patchGroupAction(accessToken, group._id, { success: false }, formData);
+      const response = await authAction(patchGroupAction, group._id, { success: false }, formData);
 
       if (!response.success) {
         console.error(response.error ?? "Something went wrong");
@@ -80,7 +82,7 @@ export function GroupCard({ group, purchasedItems, totalItems }: GroupCardProps)
   }
 
   async function handleDelete() {
-    const response = await deleteGroupAction(accessToken, group._id);
+    const response = await authAction(deleteGroupAction, group._id);
     if (!response.success) {
       console.error(response.error ?? "Something went wrong");
       return;

@@ -11,13 +11,15 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { createListAction } from "@/lib/actions/list-action";
 import { useSocket } from "@/contexts/SocketContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface CreateListProps {
   groupId: string;
 }
 
 export function CreateListCard({ groupId }: CreateListProps) {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction()
   const { socket } = useSocket();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -34,7 +36,7 @@ export function CreateListCard({ groupId }: CreateListProps) {
       const formData = new FormData();
       formData.append("listName", data.listName);
 
-      const res = await createListAction(accessToken, groupId, { success: false }, formData);
+      const res = await authAction(createListAction, groupId, { success: false }, formData);
 
       if (!res.success) {
         setServerError(res.error ?? "Something went wrong");
