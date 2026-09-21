@@ -12,6 +12,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteItemAction } from "@/lib/actions/item-action";
 import { useSocket } from "@/contexts/SocketContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface ItemContainerVerticalBtnProps {
   listId: string;
@@ -27,7 +28,8 @@ export function ItemContainerVerticalBtn({
   setIsQuantityEditable,
 }: ItemContainerVerticalBtnProps) {
   const params = useParams<{ groupId: string }>();
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction()
   const {socket} = useSocket()
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -53,7 +55,7 @@ export function ItemContainerVerticalBtn({
   async function handleDelete() {
     setServerError(null);
     try {
-      const res = await deleteItemAction(accessToken, params.groupId, listId, itemId);
+      const res = await authAction(deleteItemAction, params.groupId, listId, itemId);
 
       if (!res.success) {
         setServerError(res.error ?? "Something went wrong");

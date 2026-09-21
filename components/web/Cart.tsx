@@ -2,12 +2,12 @@
 
 import { Loader2, ShoppingCart } from "lucide-react";
 import { Button } from "../ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 import { useSocket } from "@/contexts/SocketContext";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { toast } from "../ui/toast";
 import { completeAllAction } from "@/lib/actions/item-action";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface CartProps {
   totalItems: number;
@@ -15,7 +15,7 @@ interface CartProps {
 }
 
 export function Cart({totalItems, purchasedItems}: CartProps) {
-  const {accessToken} = useAuth()
+  const authAction = useAuthAction()
   const params = useParams<{groupId: string}>()
   const {socket} = useSocket()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -27,7 +27,7 @@ export function Cart({totalItems, purchasedItems}: CartProps) {
     }
     setIsLoading(true)
     try{
-      const res = await completeAllAction(accessToken, params.groupId)
+      const res = await authAction(completeAllAction, params.groupId)
 
       if(!res.success){
         toast.add({type: "error", description: res.error ?? "Failed to complete trip"})

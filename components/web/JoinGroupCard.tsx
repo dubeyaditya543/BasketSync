@@ -9,9 +9,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { authFetch } from "@/lib/authFetch";
 
 export function JoinGroupCard() {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const form = useForm<JoinGroupFormValues>({
@@ -24,12 +25,11 @@ export function JoinGroupCard() {
   async function handleJoinGroupFormSubmit(data: JoinGroupFormValues) {
     setServerError(null);
     try{
-      const res = await fetch(`/api/v1/group/join/${data.joinCode}`, {
+      const res = await authFetch(`/api/v1/group/join/${data.joinCode}`, null, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
         }
       })
 

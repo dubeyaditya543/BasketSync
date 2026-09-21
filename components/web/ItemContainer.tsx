@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSocket } from "@/contexts/SocketContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface ItemContainerProps {
   item: {
@@ -29,7 +30,8 @@ interface ItemContainerProps {
 
 export function ItemContainer({ item }: ItemContainerProps) {
   const params = useParams<{groupId: string}>()
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction()
   const {socket} = useSocket()
   const [newItemName, setNewItemName] = useState<string | null>(null);
   const [newQuantity, setQuantity] = useState<number | null>(null);
@@ -53,7 +55,7 @@ export function ItemContainer({ item }: ItemContainerProps) {
       formData.append("itemName", newItemName ?? "")
       formData.append("quantity", (newQuantity ?? 0).toString())
 
-      const res = await patchItemAction(accessToken, params.groupId, item.list, item._id, {success: false}, formData)
+      const res = await authAction(patchItemAction, params.groupId, item.list, item._id, {success: false}, formData)
 
       if(!res.success){
         setServerError(res.error ?? "Soemthing went wrong while updating")
@@ -78,7 +80,7 @@ export function ItemContainer({ item }: ItemContainerProps) {
       const formData = new FormData()
       formData.append("purchased", value.toString())
 
-      const res = await patchItemAction(accessToken, params.groupId, item.list, item._id, {success: false}, formData)
+      const res = await authAction(patchItemAction, params.groupId, item.list, item._id, {success: false}, formData)
 
       if(!res.success){
         setServerError(res.error ?? "Something went wrong")

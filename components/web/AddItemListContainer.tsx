@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CreateListBtn } from "./CreateListBtn";
 import { CreateListCard } from "./CreateListCard";
 import { useSocket } from "@/contexts/SocketContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface AddItemProps {
   groupId: string;
@@ -21,7 +22,8 @@ interface AddItemProps {
 }
 
 export function AddItemListContainer({ groupId, lists }: AddItemProps) {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction()
   const { socket } = useSocket();
   const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<ItemFormValues>({
@@ -46,8 +48,8 @@ export function AddItemListContainer({ groupId, lists }: AddItemProps) {
       formData.append("listId", data.listId);
       formData.append("quantity", (data.quantity ?? 1).toString());
 
-      const res = await createItemAction(
-        accessToken,
+      const res = await authAction(
+        createItemAction,
         groupId,
         data.listId,
         { success: false },

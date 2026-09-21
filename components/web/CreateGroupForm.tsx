@@ -10,9 +10,11 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { createGroupAction } from "@/lib/actions/group-action";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 export function CreateGroupForm() {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const authAction = useAuthAction();
   const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupSchema as any),
@@ -23,18 +25,18 @@ export function CreateGroupForm() {
 
   async function handleGroupFormSubmit(data: GroupFormValues) {
     setServerError(null);
-    
-    const formData = new FormData()
-    formData.append("groupName", data.groupName)
 
-    const result = await createGroupAction(accessToken, {success: false}, formData)
+    const formData = new FormData();
+    formData.append("groupName", data.groupName);
 
-    if(!result.success){
-      setServerError(result.error ?? "Something went wrong")
+    const result = await authAction(createGroupAction, { success: false }, formData);
+
+    if (!result.success) {
+      setServerError(result.error ?? "Something went wrong");
       return;
     }
 
-    form.reset()
+    form.reset();
   }
 
   if (!user) {

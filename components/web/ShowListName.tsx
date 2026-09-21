@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { MoreVertical } from "lucide-react";
@@ -13,6 +12,7 @@ import {
 import { Button } from "../ui/button";
 import { deleteListAction, patchListAction } from "@/lib/actions/list-action";
 import { useSocket } from "@/contexts/SocketContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface ShowListNameProps {
   listName: string;
@@ -21,7 +21,7 @@ interface ShowListNameProps {
 }
 
 export function ShowListName({ listName, groupId, listId }: ShowListNameProps) {
-  const { accessToken } = useAuth();
+  const authAction = useAuthAction()
   const {socket} = useSocket()
   const [isListEditable, setIsListEditable] = useState<boolean>(false);
   const [newListName, setNewListName] = useState<string>(listName);
@@ -42,8 +42,8 @@ export function ShowListName({ listName, groupId, listId }: ShowListNameProps) {
       const formData = new FormData();
       formData.append("listName", newListName);
 
-      const response = await patchListAction(
-        accessToken,
+      const response = await authAction(
+        patchListAction,
         groupId,
         listId,
         { success: false },
@@ -64,7 +64,7 @@ export function ShowListName({ listName, groupId, listId }: ShowListNameProps) {
 
   async function handleDelete(){
     try{
-      const response = await deleteListAction(accessToken, groupId, listId)
+      const response = await authAction(deleteListAction, groupId, listId)
       if(!response.success){
         return
       }

@@ -17,7 +17,7 @@ import { Input } from "../ui/input";
 import { ChangeEvent, useState } from "react";
 import { AvatarPic } from "./AvatarPic";
 import { uploadImageAction } from "@/lib/actions/user-action";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthAction } from "@/lib/hooks/useAuthAction";
 
 interface UploadImageFormProps {
   fullName: string;
@@ -29,7 +29,7 @@ export function UploadImageForm({
   fullName,
   avatarUrl,
 }: UploadImageFormProps) {
-  const { accessToken } = useAuth();
+  const authAction = useAuthAction()
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [fileInputKey, setFileInputKey] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
@@ -55,7 +55,7 @@ export function UploadImageForm({
     const formData = new FormData();
     formData.append("image", imageFile);
 
-    const uploadedImageResult = await uploadImageAction(accessToken, { success: false }, formData);
+    const uploadedImageResult = await authAction(uploadImageAction, { success: false }, formData);
 
     if (!uploadedImageResult.success) {
       throw new Error(uploadedImageResult.error ?? "Something went wrong while uplaoding image");
