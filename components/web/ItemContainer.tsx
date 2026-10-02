@@ -94,52 +94,79 @@ export function ItemContainer({ item }: ItemContainerProps) {
   }
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-slate-200/80 p-4 shadow-xs transition hover:border-slate-300 bg-slate-100">
-      <div className="flex items-center gap-3.5">
+    <div
+      className={`group/item relative flex items-center justify-between rounded-2xl border bg-white px-5 py-4 transition-all duration-200 hover:shadow-md ${
+        item.purchased
+          ? "border-emerald-200/80 bg-emerald-50/30"
+          : "border-slate-200/80 shadow-xs hover:border-slate-300"
+      }`}
+    >
+      {/* Left: Checkbox + Name */}
+      <div className="flex min-w-0 flex-1 items-center gap-4">
         <Checkbox
           checked={item.purchased}
           onCheckedChange={(checked) => handlePurchase(Boolean(checked))}
-          className={`flex hover:cursor-pointer h-6 w-6 shrink-0 items-center justify-center rounded-full  text-white`}
+          className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-white transition-colors"
         >
           {item.purchased && <Check className="h-4 w-4 stroke-4" />}
         </Checkbox>
+
         {isItemNameEditable ? (
-          <Input value={newItemName ?? item.itemName} onChange={(e) => setNewItemName(e.target.value)} />
+          <Input
+            value={newItemName ?? item.itemName}
+            onChange={(e) => setNewItemName(e.target.value)}
+            className="h-9 max-w-xs rounded-xl border-slate-200 text-sm focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+            autoFocus
+          />
         ) : (
           <span
-            className={`text-sm font-medium text-slate-500 ${item.purchased && "line-through"}`}
+            className={`truncate text-sm font-medium transition-all duration-200 ${
+              item.purchased ? "text-slate-400 line-through" : "text-slate-800"
+            }`}
           >
             {item.itemName}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* Right: Quantity, Avatar, Actions */}
+      <div className="flex shrink-0 items-center gap-3">
         {item.quantity ? (
           isQuantityEditable ? (
             <Input
               type="number"
               value={newQuantity ?? item.quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
-              className="w-20"
+              className="h-9 w-20 rounded-xl border-slate-200 text-center text-sm focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
+              autoFocus
             />
           ) : (
-            <span className="rounded-lg bg-slate-100 px-2.5 py-1 font-semibold text-slate-700">
-              {item.quantity}x
+            <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-bold tabular-nums text-slate-600">
+              ×{item.quantity}
             </span>
           )
         ) : null}
 
-        {(isItemNameEditable || isQuantityEditable) && <Button onClick={handleEdit} className={"bg-green-800 text-white rounded-md hover:bg-green-900 hover:cursor-pointer font-semibold"}>Save</Button>}
+        {(isItemNameEditable || isQuantityEditable) && (
+          <Button
+            onClick={handleEdit}
+            className="h-8 cursor-pointer rounded-lg bg-[#0c5443] px-3.5 text-xs font-semibold text-white shadow-xs transition hover:bg-[#094738]"
+          >
+            Save
+          </Button>
+        )}
 
         {item.addedBy?._id !== user.userId && item.addedBy && (
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <span className="font-semibold">Added by</span>
+          <div className="flex items-center gap-1.5 rounded-full border border-slate-100 bg-slate-50 py-0.5 pr-2.5 pl-0.5">
             <AvatarPic
               _id={item.addedBy._id}
               fullName={item.addedBy.fullName}
               avatarUrl={item.addedBy.avatarUrl}
+              className="h-6 w-6 text-[10px]"
             />
+            <span className="text-[11px] font-medium text-slate-500">
+              {item.addedBy.fullName.split(" ")[0]}
+            </span>
           </div>
         )}
 

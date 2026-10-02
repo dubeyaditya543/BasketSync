@@ -11,7 +11,7 @@ export function UserProfileBtn(props: React.ComponentProps<typeof Button>) {
 
   return (
     <Button {...props} className="min-w-0 flex-1 flex-col bg-transparent hover:bg-transparent hover:cursor-pointer">
-      <p className="truncate text-sm font-semibold text-white">
+      <p className="truncate text-sm font-semibold">
         {currentUser && currentUser.fullName}
       </p>
       <p className="truncate text-xs text-slate-400">{currentUser && currentUser.email}</p>

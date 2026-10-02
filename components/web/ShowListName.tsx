@@ -77,45 +77,49 @@ export function ShowListName({ listName, groupId, listId }: ShowListNameProps) {
   return (
     <>
       {isListEditable ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <Input
             type="text"
-            className="w-48"
+            className="h-9 w-52 rounded-xl border-slate-200 text-sm font-semibold focus-visible:border-emerald-500 focus-visible:ring-emerald-500/20"
             value={newListName}
             onChange={(e) => setNewListName(e.target.value)}
+            autoFocus
           />
           <Button
-            className={"w-fit cursor-pointer bg-green-700 text-sm font-semibold hover:bg-green-800"}
+            className="h-9 cursor-pointer rounded-lg bg-[#0c5443] px-3.5 text-xs font-semibold text-white shadow-xs transition hover:bg-[#094738]"
             onClick={handleListEdit}
           >
             Save
           </Button>
           <Button
-            className={"w-fit cursor-pointer bg-red-700 text-sm font-semibold hover:bg-red-800"}
+            className="h-9 cursor-pointer rounded-lg border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50"
             onClick={() => setIsListEditable(false)}
           >
             Cancel
           </Button>
         </div>
       ) : (
-        <div className="flex items-center gap-2">
-          <h3 className="text-2xl font-semibold">{listName}</h3>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-[#0c5443]">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v4a2 2 0 0 0 2 2h4"/></svg>
+          </div>
+          <h3 className="text-lg font-bold tracking-tight text-slate-900">{listName}</h3>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <button className="text-slate-600 hover:cursor-pointer hover:text-slate-600">
+                <button className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-600">
                   <MoreVertical className="h-4 w-4" />
                 </button>
               }
             />
             <DropdownMenuContent>
               <DropdownMenuItem
-                className="hover:cursor-pointer"
+                className="cursor-pointer"
                 onClick={() => setIsListEditable(true)}
               >
                 Edit Name
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-500 hover:cursor-pointer" onClick={handleDelete}>
+              <DropdownMenuItem className="cursor-pointer text-red-500 focus:text-red-500" onClick={handleDelete}>
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

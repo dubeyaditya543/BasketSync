@@ -28,17 +28,24 @@ export async function DisplayAllItems({ list }: DisplayAllItemsProps) {
   }));
 
   return (
-    <>
-      <ShowListName groupId={list.group} listId={list._id} listName={list.listName} />
-      <div className="container flex w-full flex-col gap-4 rounded-md bg-gray-200 px-4 py-4">
+    <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs">
+      {/* List header */}
+      <div className="border-b border-slate-100 px-6 py-4">
+        <ShowListName groupId={list.group} listId={list._id} listName={list.listName} />
+      </div>
+
+      {/* Items */}
+      <div className="flex flex-col gap-3 p-5">
         {items.length === 0 ? (
-          <span className="py-4 text-center font-semibold">Nothing to show here</span>
+          <div className="flex items-center justify-center rounded-xl border border-dashed border-slate-200 py-8 text-sm font-medium text-slate-400">
+            No items yet — add one above
+          </div>
         ) : (
           items.map((item) => (
             <ItemContainer key={item._id.toString()} item={JSON.parse(JSON.stringify(item))} />
           ))
         )}
       </div>
-    </>
+    </section>
   );
 }

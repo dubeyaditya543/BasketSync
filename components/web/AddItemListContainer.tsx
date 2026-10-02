@@ -72,15 +72,20 @@ export function AddItemListContainer({ groupId, lists }: AddItemProps) {
   return (
     <>
       {serverError && (
-        <p className="container mb-2 rounded-lg bg-red-600 px-4 py-2 font-semibold text-white">
+        <div className="mb-3 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
           {serverError}
-        </p>
+        </div>
       )}
       <form
-        className="grid grid-cols-1 gap-2.5 pr-4 sm:grid-cols-13 sm:items-center"
+        className="flex flex-col gap-3 sm:flex-row sm:items-end"
         onSubmit={form.handleSubmit(handleAddItem)}
       >
-        <div className="sm:col-span-5">
+        {/* Item Name */}
+        <div className="flex-1 space-y-1">
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            Item
+          </label>
           <Controller
             name="itemName"
             control={form.control}
@@ -88,15 +93,19 @@ export function AddItemListContainer({ groupId, lists }: AddItemProps) {
               <Input
                 {...field}
                 type="text"
-                placeholder="[ Item Name ]"
-                className="h-10 rounded-xl px-3.5 text-sm placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:bg-white focus-visible:ring-emerald-500/20"
+                placeholder="What do you need?"
+                className="h-10 rounded-xl border-slate-200 bg-slate-50/50 px-3.5 text-sm placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:bg-white focus-visible:ring-emerald-500/20"
                 aria-invalid={fieldState.invalid}
               />
             )}
           />
         </div>
 
-        <div className="sm:col-span-2">
+        {/* Quantity */}
+        <div className="w-24 space-y-1">
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            Qty
+          </label>
           <Controller
             name="quantity"
             control={form.control}
@@ -104,15 +113,19 @@ export function AddItemListContainer({ groupId, lists }: AddItemProps) {
               <Input
                 {...field}
                 type="number"
-                placeholder="Quantity"
-                className="h-10 rounded-xl px-3.5 text-sm placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:bg-white focus-visible:ring-emerald-500/20"
+                placeholder="1"
+                className="h-10 rounded-xl border-slate-200 bg-slate-50/50 px-3.5 text-center text-sm placeholder:text-slate-400 focus-visible:border-emerald-500 focus-visible:bg-white focus-visible:ring-emerald-500/20"
                 aria-invalid={fieldState.invalid}
               />
             )}
           />
         </div>
 
-        <div className="sm:col-span-2">
+        {/* List Selector */}
+        <div className="w-44 space-y-1">
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            List
+          </label>
           <Controller
             name="listId"
             control={form.control}
@@ -127,21 +140,22 @@ export function AddItemListContainer({ groupId, lists }: AddItemProps) {
           />
         </div>
 
-        <div className="flex w-full items-center gap-2 sm:col-span-2">
+        {/* Actions */}
+        <div className="flex items-end gap-2">
           <Button
             type="submit"
-            className="h-10 w-full gap-1.5 rounded-md bg-[#257a66] px-4 text-sm font-semibold text-white shadow-xs transition hover:cursor-pointer hover:bg-[#229276]"
+            className="h-10 gap-1.5 rounded-xl bg-[#0c5443] px-5 text-sm font-semibold text-white shadow-xs transition hover:cursor-pointer hover:bg-[#094738]"
           >
             <Plus className="h-4 w-4" />
-            <span>Add Item</span>
+            <span>Add</span>
           </Button>
+          <Popover>
+            <PopoverTrigger render={<CreateListBtn />} />
+            <PopoverContent>
+              <CreateListCard groupId={groupId} />
+            </PopoverContent>
+          </Popover>
         </div>
-        <Popover>
-          <PopoverTrigger render={<CreateListBtn />} />
-          <PopoverContent>
-            <CreateListCard groupId={groupId} />
-          </PopoverContent>
-        </Popover>
       </form>
     </>
   );
