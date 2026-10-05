@@ -35,15 +35,12 @@ export function GroupSocketListener({ groupId }: GroupSocketListenerProps) {
     <div className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium shadow-xs">
       {isConnected ? (
         <>
-          <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
           <Wifi className="h-3.5 w-3.5 text-emerald-600" />
           <span className="text-emerald-700">Live Sync</span>
         </>
       ) : (
         <>
-          <span className="h-2 w-2 rounded-full bg-amber-500">
             <WifiOff className="h-3.5 w-3.5 text-amber-600" />
-          </span>
           <span className="text-amber-700">Connecting...</span>
         </>
       )}

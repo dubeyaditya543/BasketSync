@@ -14,7 +14,7 @@ interface SidebarProps {
 
 export function Sidebar({ loggedInUser }: SidebarProps) {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col justify-between bg-[#111822] p-5 text-slate-300 md:flex">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col justify-between overflow-y-auto bg-[#111822] p-5 text-slate-300 md:flex">
       <div className="space-y-8">
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2.5 px-2">

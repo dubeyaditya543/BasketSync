@@ -1,4 +1,4 @@
-import { Users, Search, Bell } from "lucide-react";
+import { Users, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CreateGroupForm } from "@/components/web/CreateGroupForm";
 import { CreateGroupBtn } from "@/components/web/CreateGroupBtn";

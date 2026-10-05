@@ -42,14 +42,18 @@ export function NotificationBtn({ children }: { children: ReactNode }) {
     <div className="relative">
       <button
         onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-        className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+        className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-slate-200/80 bg-white text-slate-500 shadow-xs transition hover:bg-slate-50 hover:text-slate-800"
       >
-        <Bell className="h-4 w-4" />
-        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+        <Bell className="h-4.5 w-4.5" />
+        <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white ring-2 ring-white">
           2
         </span>
       </button>
-      {isNotificationOpen && <div className="absolute top-full right-0 z-50 mt-2">{children}</div>}
+      {isNotificationOpen && (
+        <div className="absolute top-full right-0 z-50 mt-2.5 animate-in fade-in slide-in-from-top-1 duration-200">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
